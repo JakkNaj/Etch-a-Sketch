@@ -1,4 +1,22 @@
-let gridSectionWidth = 960;
+let gridSectionWidth = 500;
+let gridSectionHeight = 500;
+let defaultColor = "#FF8B3D";
+
+let mouseDown = 0;
+document.querySelector(".gridSection").onmousedown = function () {
+    mouseDown++;
+}
+document.querySelector(".gridSection").onmouseup = function () {
+    mouseDown--;
+}
+
+function styleGridElem(elem, dimensions){
+    elem.style.width = gridSectionWidth/dimensions.toString() + "px";
+    elem.style.height = gridSectionHeight/dimensions.toString() + "px";
+    elem.classList.add("square");
+    return elem;
+}
+
 function createGrid(dimensions) {
     let gridWrapper = document.createElement('div')
     gridWrapper.classList.add("gridWrapper");
@@ -6,10 +24,7 @@ function createGrid(dimensions) {
         let row = document.createElement('div');
         for (let k = 0; k < dimensions; k++){
             let elem = document.createElement('div');
-            elem.style.width = 960/dimensions.toString() + "px";
-            elem.style.height = 960/dimensions.toString() + "px";
-            elem.classList.add("square");
-            row.appendChild(elem);
+            row.appendChild(styleGridElem(elem, dimensions));
             row.classList.add("grid-row");
         }
         gridWrapper.appendChild(row);
@@ -18,7 +33,7 @@ function createGrid(dimensions) {
 }
 
 function displayGrid(grid){
-    let leftSection = document.querySelector('div[class=left]');
+    let leftSection = document.querySelector('div[class=gridSection]');
     leftSection.width = gridSectionWidth;
     leftSection.innerHTML = grid.innerHTML;
 }
@@ -36,4 +51,23 @@ adjustButton.addEventListener("click", () => {
         }
         displayGrid(createGrid(newDimensions));
     }
+})
+
+let colorButton = document.getElementById("colorBtn");
+colorButton.addEventListener("click", () => {
+    defaultColor = document.querySelector("input[type=color]").value;
+})
+
+let colorChanger = document.querySelector(".colorpicker");
+colorChanger.addEventListener("mouseout", () => {
+    document.getElementById("colorBtn").click();
+})
+
+let gridSquares = document.querySelectorAll(".square");
+gridSquares.forEach((square) => {
+    square.addEventListener("mouseover", () => {
+        if (mouseDown > 0) {
+            square.style.backgroundColor = defaultColor;
+        }
+    })
 })
