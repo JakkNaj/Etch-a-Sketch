@@ -56,6 +56,7 @@ adjustButton.addEventListener("click", () => {
 
 let colorButton = document.getElementById("colorBtn");
 colorButton.addEventListener("click", () => {
+    rainbowMode = false;
     defaultColor = document.querySelector("input[type=color]").value;
 })
 
@@ -87,11 +88,15 @@ function getRandColor() {
 
 let rainbowButton = document.getElementById("rainbowBtn");
 rainbowButton.addEventListener("click", () => {
+    rainbowMode = true;
     gridSquares.forEach((square) => {
         square.addEventListener("mouseenter", () => {
-            if (mouseDown > 0) {
+            if (mouseDown > 0 && rainbowMode) {
                 square.style.backgroundColor = getRandColor();
             }
         })
     })
 })
+
+
+
