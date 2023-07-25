@@ -2,6 +2,8 @@ let gridSectionWidth = 500;
 let gridSectionHeight = 500;
 let defaultColor = "#FF8B3D";
 let rainbowMode = false;
+let eraserMode = false;
+let colorMode = true;
 
 let mouseDown = 0;
 document.querySelector(".gridSection").onmousedown = function () {
@@ -27,6 +29,14 @@ function createGrid(dimensions) {
             let elem = document.createElement('div');
             row.appendChild(styleGridElem(elem, dimensions));
             row.classList.add("grid-row");
+            //border fix
+            if (k === dimensions - 1){
+                elem.classList.add("last-column");
+            }
+        }
+        //border fix
+        if (i === dimensions - 1){
+            row.classList.add("last-row");
         }
         gridWrapper.appendChild(row);
     }
@@ -42,7 +52,6 @@ function displayGrid(grid){
 //make 16 by 16 for the beginning
 displayGrid(createGrid(16));
 
-
 let adjustButton = document.getElementById("adjustBtn");
 adjustButton.addEventListener("click", () => {
     let newDimensions = prompt("Please enter new grid dimensions!");
@@ -52,28 +61,74 @@ adjustButton.addEventListener("click", () => {
         }
         displayGrid(createGrid(newDimensions));
     }
+    addEventListenersToSquares();
 })
 
+//give squares event listeners
+function addEventListenersToSquares() {
+    document.querySelectorAll(".square").forEach((square) => {
+        square.addEventListener("mouseover", () => {
+            // color mode
+            if (mouseDown > 0 && colorMode) {
+                square.style.backgroundColor = defaultColor;
+            }
+
+            //rainbow mode
+            if (mouseDown > 0 && rainbowMode) {
+                square.style.backgroundColor = getRandColor();
+            }
+
+            //eraser mode
+            if (mouseDown > 0 && eraserMode) {
+                square.style.backgroundColor = "white";
+            }
+        })
+    })
+}
+addEventListenersToSquares();
+
+//COLOR BUTTON
 let colorButton = document.getElementById("colorBtn");
 colorButton.addEventListener("click", () => {
     rainbowMode = false;
+    eraserMode = false;
+    colorMode = true;
     defaultColor = document.querySelector("input[type=color]").value;
+    resetButtonsBackground();
+    colorButton.style.backgroundColor = "darkorange";
 })
 
+//COLOR PICKER
 let colorChanger = document.querySelector(".colorpicker ");
 colorChanger.addEventListener("input", () => {
     defaultColor = document.querySelector("input[type=color]").value;
 })
 
-let gridSquares = document.querySelectorAll(".square");
-gridSquares.forEach((square) => {
-    square.addEventListener("mouseover", () => {
-        if (mouseDown > 0) {
-            square.style.backgroundColor = defaultColor;
-        }
-    })
+function getRandColor() {
+    let color = Math.floor(Math.random() * 16777216).toString(16);
+    return '#000000'.slice(0, -color.length) + color;
+}
+//RAINBOW BUTTON
+let rainbowButton = document.getElementById("rainbowBtn");
+rainbowButton.addEventListener("click", () => {
+    eraserMode = false;
+    colorMode = false;
+    rainbowMode = true;
+    resetButtonsBackground();
+    rainbowButton.style.backgroundColor = "darkorange";
 })
 
+//ERASER BUTTON
+let eraserBtn = document.getElementById("eraserBtn");
+eraserBtn.addEventListener("click", () => {
+    rainbowMode = false;
+    colorMode = false;
+    eraserMode = true;
+    resetButtonsBackground();
+    eraserBtn.style.backgroundColor = "darkorange";
+})
+
+//CLEAR BUTTON
 let clearButton = document.getElementById("clearBtn");
 clearButton.addEventListener("click", () => {
     document.querySelectorAll(".square").forEach( (square) => {
@@ -81,22 +136,8 @@ clearButton.addEventListener("click", () => {
     })
 })
 
-function getRandColor() {
-    let color = Math.floor(Math.random() * 16777216).toString(16);
-    return '#000000'.slice(0, -color.length) + color;
-}
-
-let rainbowButton = document.getElementById("rainbowBtn");
-rainbowButton.addEventListener("click", () => {
-    rainbowMode = true;
-    gridSquares.forEach((square) => {
-        square.addEventListener("mouseenter", () => {
-            if (mouseDown > 0 && rainbowMode) {
-                square.style.backgroundColor = getRandColor();
-            }
-        })
+function resetButtonsBackground() {
+    document.querySelectorAll("button").forEach((button) => {
+        button.style.backgroundColor = "white";
     })
-})
-
-
-
+}
