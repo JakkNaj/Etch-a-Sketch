@@ -97,6 +97,7 @@ colorButton.addEventListener("click", () => {
     resetButtonsBackground();
     colorButton.style.backgroundColor = "darkorange";
 })
+colorButton.click();
 
 //COLOR PICKER
 let colorChanger = document.querySelector(".colorpicker ");
