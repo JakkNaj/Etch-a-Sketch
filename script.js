@@ -1,6 +1,7 @@
 let gridSectionWidth = 500;
 let gridSectionHeight = 500;
 let defaultColor = "#FF8B3D";
+let rainbowMode = false;
 
 let mouseDown = 0;
 document.querySelector(".gridSection").onmousedown = function () {
@@ -79,3 +80,18 @@ clearButton.addEventListener("click", () => {
     })
 })
 
+function getRandColor() {
+    let color = Math.floor(Math.random() * 16777216).toString(16);
+    return '#000000'.slice(0, -color.length) + color;
+}
+
+let rainbowButton = document.getElementById("rainbowBtn");
+rainbowButton.addEventListener("click", () => {
+    gridSquares.forEach((square) => {
+        square.addEventListener("mouseenter", () => {
+            if (mouseDown > 0) {
+                square.style.backgroundColor = getRandColor();
+            }
+        })
+    })
+})
