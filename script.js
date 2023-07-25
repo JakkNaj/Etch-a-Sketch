@@ -58,9 +58,9 @@ colorButton.addEventListener("click", () => {
     defaultColor = document.querySelector("input[type=color]").value;
 })
 
-let colorChanger = document.querySelector(".colorpicker");
-colorChanger.addEventListener("mouseout", () => {
-    document.getElementById("colorBtn").click();
+let colorChanger = document.querySelector(".colorpicker ");
+colorChanger.addEventListener("input", () => {
+    defaultColor = document.querySelector("input[type=color]").value;
 })
 
 let gridSquares = document.querySelectorAll(".square");
@@ -71,3 +71,11 @@ gridSquares.forEach((square) => {
         }
     })
 })
+
+let clearButton = document.getElementById("clearBtn");
+clearButton.addEventListener("click", () => {
+    document.querySelectorAll(".square").forEach( (square) => {
+        square.style.backgroundColor = "white";
+    })
+})
+
